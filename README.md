@@ -5,3 +5,6 @@ El proyecto Onemotoring está gobernado por la Autoridad de Transporte Terrestre
 - Jeyson Lino
 - Jose Zuñiga
 - Juan Herencia
+
+# Diagrama de la arquitectura
+!![Arquitectura de cloudcomputing para OneMotoring](/Diagrama_OneMotoring.drawio.png)
