@@ -1,0 +1,129 @@
+DROP DATABASE IF EXISTS bd_api_vehiculos;
+CREATE DATABASE bd_api_vehiculos CHARSET utf8mb4;
+USE bd_api_vehiculos;
+
+CREATE TABLE propietario
+(
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+-- Tabla de vehículos
+CREATE TABLE vehiculo (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    marca VARCHAR(50) NOT NULL,
+    modelo VARCHAR(50) NOT NULL,
+    ano INT(4) NOT NULL,
+    placa VARCHAR(10) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE propiedad
+(
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    id_propietario INT(11),
+    id_vehiculo INT(11),
+    fecha_reg DATE NOT NULL,
+    estado VARCHAR(15),
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_propietario) REFERENCES propietario(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_vehiculo) REFERENCES vehiculo(id) ON DELETE CASCADE
+);
+
+CREATE TABLE tasa_impuesto
+(
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    descripcion VARCHAR(255),
+    tasa float(6,3), -- porcentajes 0.075
+    PRIMARY KEY (id)
+);
+
+-- Tabla de impuesto
+CREATE TABLE impuesto(
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    vehiculo_id INT(11) NOT NULL,
+    tasa_id int(11),
+    fecha DATE NOT NULL,
+    valor_imp float(8,2),  -- 380.50
+    PRIMARY KEY (id),
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id) ON DELETE CASCADE,
+    FOREIGN KEY (tasa_id) REFERENCES tasa_impuesto(id) ON DELETE CASCADE
+);
+
+-- Tabla de accidentes
+CREATE TABLE accidente (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    vehiculo_id INT(11) NOT NULL,
+    fecha DATE NOT NULL,
+    descripcion VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id) ON DELETE CASCADE
+);
+
+-- Tabla de robos
+CREATE TABLE robo (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    vehiculo_id INT(11) NOT NULL,
+    fecha DATE NOT NULL,
+    descripcion VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id) ON DELETE CASCADE
+);
+
+-- Tabla de papeletas
+CREATE TABLE papeleta (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    vehiculo_id INT(11) NOT NULL,
+    fecha DATE NOT NULL,
+    descripcion VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id) ON DELETE CASCADE
+);
+
+-- Tabla de deudas
+CREATE TABLE deuda (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    vehiculo_id INT(11) NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
+    descripcion VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id) ON DELETE CASCADE
+);
+
+-- insertar propietarios
+INSERT INTO propietario (name) VALUES ('Juan Perez');
+INSERT INTO propietario (name) VALUES ('Maria Lopez');
+INSERT INTO propietario (name) VALUES ('Carlos Jimenez');
+
+-- vehículos
+INSERT INTO vehiculo (marca, modelo, ano, placa) VALUES ('Toyota', 'Corolla', 2020, 'ABC123');
+INSERT INTO vehiculo (marca, modelo, ano, placa) VALUES ('Honda', 'Civic', 2019, 'XYZ987');
+INSERT INTO vehiculo (marca, modelo, ano, placa) VALUES ('Ford', 'Focus', 2018, 'HJK456');
+
+--propiedad
+INSERT INTO propiedad (id_propietario, id_vehiculo, fecha_reg, estado) VALUES (1, 1, '2024-01-01','Activo');
+INSERT INTO propiedad (id_propietario, id_vehiculo, fecha_reg, estado) VALUES (2, 2, '2024-01-02','Activo');
+INSERT INTO propiedad (id_propietario, id_vehiculo, fecha_reg, estado) VALUES (3, 3, '2024-01-03','Activo');
+
+--tasa impuesto
+INSERT INTO impuesto (vehiculo_id, tasa_id, fecha, valor_imp) VALUES (1, 1, '2024-05-01', 3200.00);
+INSERT INTO impuesto (vehiculo_id, tasa_id, fecha, valor_imp) VALUES (2, 2, '2024-05-02', 1500.00);
+
+--accidentes
+INSERT INTO accidente (vehiculo_id, fecha, descripcion) VALUES (1, '2024-04-15', 'Choque leve en parking');
+INSERT INTO accidente (vehiculo_id, fecha, descripcion) VALUES (3, '2024-04-18', 'Colision frontal');
+
+--robo
+INSERT INTO robo (vehiculo_id, fecha, descripcion) VALUES (2, '2024-02-20', 'Robo en calle 24');
+
+--papeleta
+INSERT INTO papeleta (vehiculo_id, fecha, descripcion) VALUES (1, '2024-03-10', 'Exceso de velocidad en autopista');
+INSERT INTO papeleta (vehiculo_id, fecha, descripcion) VALUES (3, '2024-03-15', 'Estacionamiento no permitido');
+
+--deuda
+INSERT INTO deuda (vehiculo_id, monto, descripcion) VALUES (2, 750.00, 'Deuda por impuesto vehicular atrasado');
+INSERT INTO deuda (vehiculo_id, monto, descripcion) VALUES (3, 450.00, 'Deuda por multas de tráfico');
+
+COMMIT;
+

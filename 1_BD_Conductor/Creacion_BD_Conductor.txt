@@ -1,0 +1,20 @@
+DROP DATABASE IF EXISTS bd_api_conductor;
+CREATE DATABASE bd_api_conductor CHARSET utf8mb4;
+USE bd_api_conductor;
+
+-- Tabla de conductores
+CREATE TABLE conductor (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    nombres VARCHAR(100) NOT NULL,
+    edad INT(11) NOT NULL,
+    direccion VARCHAR(100) NOT NULL,
+    licencia VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+-- Inserción de datos en la tabla conductor
+INSERT INTO conductor(nombres, edad, direccion, licencia) VALUES('Jeyson Lino', 30, 'Direccion 1', 'L123456');
+INSERT INTO conductor(nombres, edad, direccion, licencia) VALUES('Juan Herencia', 30, 'Direccion 2', 'L654321');
+INSERT INTO conductor(nombres, edad, direccion, licencia) VALUES('Jose Zuñiga', 30, 'Direccion 3', 'L789012');
+
+COMMIT;

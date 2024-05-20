@@ -1,0 +1,59 @@
+DROP DATABASE IF EXISTS bd_api_licencias;
+CREATE DATABASE bd_api_licencias CHARSET utf8mb4;
+USE bd_api_licencias;
+
+-- Tabla de licencias
+CREATE TABLE licencia (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    conductor_name VARCHAR(50) NOT NULL,
+    tipo VARCHAR(50) NOT NULL,
+    fecha_expedicion DATE NOT NULL,
+    numero VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+-- Tabla de vigencias
+CREATE TABLE vigencia (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    licencia_id INT(11) NOT NULL,
+    fecha_ini_vig DATE NOT NULL,
+    fecha_fin_vig DATE NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (licencia_id) REFERENCES licencia(id)
+);
+
+-- tabla de estado licencia
+CREATE TABLE estado (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    vigencia_id INT(11) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    fecha_estado DATE NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (vigencia_id) REFERENCES vigencia(id)
+);
+
+-- Inserción de datos en la tabla licencia
+INSERT INTO licencia(conductor_name, tipo, fecha_expedicion, numero) VALUES('Jeyson Lino', 'A', '2015-01-01', 'L123456');
+INSERT INTO licencia(conductor_name, tipo, fecha_expedicion, numero) VALUES('Juan Herencia', 'A', '2020-05-01', 'L654321');
+INSERT INTO licencia(conductor_name, tipo, fecha_expedicion, numero) VALUES('Jose Zuniga', 'A', '2017-07-01', 'L789012');
+INSERT INTO licencia(conductor_name, tipo, fecha_expedicion, numero) VALUES('Jose Zuniga', 'B', '2023-02-01', 'L789012');
+
+--Inserción de datos en la tabla vigencia
+INSERT INTO vigencia(licencia_id, fecha_ini_vig, fecha_fin_vig) VALUES(1, '2015-01-01', '2020-01-01');
+INSERT INTO vigencia(licencia_id, fecha_ini_vig, fecha_fin_vig) VALUES(1, '2020-02-01', '2025-02-01');
+INSERT INTO vigencia(licencia_id, fecha_ini_vig, fecha_fin_vig) VALUES(2, '2020-06-01', '2025-06-01');
+INSERT INTO vigencia(licencia_id, fecha_ini_vig, fecha_fin_vig) VALUES(3, '2017-07-01', '2022-07-01');
+INSERT INTO vigencia(licencia_id, fecha_ini_vig, fecha_fin_vig) VALUES(4, '2023-01-01', '2028-01-01');
+
+-- Inserción de datos en la tabla estado
+INSERT INTO estado(vigencia_id, estado, fecha_estado) VALUES(1, 'Emitido', '2015-01-01');
+INSERT INTO estado(vigencia_id, estado, fecha_estado) VALUES(1, 'Suspendido', '2017-05-01');
+INSERT INTO estado(vigencia_id, estado, fecha_estado) VALUES(1, 'Reactivado', '2018-09-01');
+INSERT INTO estado(vigencia_id, estado, fecha_estado) VALUES(1, 'Expirado', '2020-01-01');
+INSERT INTO estado(vigencia_id, estado, fecha_estado) VALUES(2, 'Emitido', '2020-02-01');
+INSERT INTO estado(vigencia_id, estado, fecha_estado) VALUES(3, 'Emitido', '2020-06-01');
+INSERT INTO estado(vigencia_id, estado, fecha_estado) VALUES(4, 'Emitido', '2017-07-01');
+INSERT INTO estado(vigencia_id, estado, fecha_estado) VALUES(4, 'Expirado', '2022-07-01');
+INSERT INTO estado(vigencia_id, estado, fecha_estado) VALUES(5, 'Emitido', '2023-01-01');
+
+COMMIT;
